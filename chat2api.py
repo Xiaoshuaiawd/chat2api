@@ -69,6 +69,18 @@ async def process(request_data, req_token):
 async def send_conversation(request: Request, req_token: str = Depends(oauth2_scheme)):
     try:
         request_data = await request.json()
+        for message in request_data['messages']:
+            # 检查 role 字段
+            if message.get('role') == 'assistant':
+                # 替换 role 为 user
+                message['role'] = 'user'
+                # 在 content 文本前添加 "assistant："
+                message['content'] = f"assistant：{message['content']}"
+            if message.get('role') == 'system':
+                # 替换 role 为 user
+                message['role'] = 'user'
+                # 在 content 文本前添加 "assistant："
+                message['content'] = f"system：{message['content']}"
     except Exception:
         raise HTTPException(status_code=400, detail={"error": "Invalid JSON body"})
     chat_service, res = await async_retry(process, request_data, req_token)
