@@ -67,7 +67,7 @@ REDIS_CONFIG = {
 }
 
 logger.info("-" * 60)
-logger.info("Chat2Api 1.4.12 | https://github.com/lanqian528/chat2api")
+logger.info("Chat2Api 0.0.1 | https://github.com/Xiaoshuaiawd/chat2api")
 logger.info("-" * 60)
 logger.info("Environment variables:")
 logger.info("API_PREFIX:        " + str(api_prefix))
