@@ -53,6 +53,8 @@ async def get_rt_at_key_list(auth_key):
                     if len(rt_at_key) < 100:
                         access_token = await get_ak(rt_at_key)
                         access_token_list.append(access_token)
+                    else:
+                        access_token_list.append(rt_at_key)
                 rt_at_key = ",".join(access_token_list)
             else:
                 if len(rt_at_key) < 100:
