@@ -19,6 +19,7 @@ async def get_rt_at_key_list(auth_key):
     redis_pool = await get_redis_pool()
     # 尝试从 Redis 获取
     data_str = await redis_pool.get(redis_key)
+    print(data_str)
     if data_str:
         data = json.loads(data_str)
         rt_at_key = data["rt_at_key"]
@@ -30,6 +31,7 @@ async def get_rt_at_key_list(auth_key):
     else:
         # Redis 中没有缓存，从 MySQL 获取
         pool = await aiomysql.create_pool(**DB_CONFIG)
+        print(pool)
         async with pool.acquire() as conn:
             async with conn.cursor() as cur:
                 # 使用参数化查询以防止SQL注入
