@@ -50,10 +50,10 @@ user_agents_list = ast.literal_eval(user_agents)
 
 # 数据库配置
 DB_CONFIG = {
-    'host': '103.143.81.125',
-    'port': 3306,
-    'user': 'root',
-    'password': 'ZWS1998',
+    'host': '159.223.37.28',
+    'port': 23190,
+    'user': 'avnadmin',
+    'password': 'AVNS_kWT94vfTuXN2mWhidSh',
     'db': 'chat2api',
     'charset': 'utf8', 
 }
@@ -61,8 +61,8 @@ DB_CONFIG = {
 # Redis 配置
 REDIS_CONFIG = {
     'host': '103.143.81.125',  # 根据实际情况修改
-    'port': 6380,
-    'password': None,
+    'port': 6379,
+    'password': 'ZWS1998',
     'db': 0,
 }
 

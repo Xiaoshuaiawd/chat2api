@@ -70,18 +70,3 @@ async def get_rt_at_key_list(auth_key):
             return None, None
     redis_pool.close()
     await redis_pool.wait_closed()
-
-#删除Mysql数据库及redis中的缓存中的token
-async def delete_rt_at_key(redis_pool, auth_key):
-    print("删除Mysql数据库及redis中的缓存中的token:" + auth_key)
-    redis_key = f"{AUTH_KEY_REDIS_PREFIX}{auth_key}"
-    await redis_pool.delete(redis_key)
-    pool = await aiomysql.create_pool(**DB_CONFIG)
-    async with pool.acquire() as conn:
-        async with conn.cursor() as cur:
-            await cur.execute("DELETE FROM chat2api.auth_keys WHERE auth_key = %s", (auth_key,))
-            deleted_rows = cur.rowcount
-            await conn.commit()  # 提交事务
-            print(f"删除的行数: {deleted_rows}")
-    pool.close()
-    await pool.wait_closed()
