@@ -61,7 +61,7 @@ DB_CONFIG = {
 # Redis 配置
 REDIS_CONFIG = {
     'host': '103.143.81.125',  # 根据实际情况修改
-    'port': 6379,
+    'port': 6380,
     'password': 'ZWS1998',
     'db': 0,
 }
