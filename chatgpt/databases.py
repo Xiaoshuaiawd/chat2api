@@ -8,7 +8,7 @@ from utils.get_ak import get_ak
 # Redis 键名前缀
 AUTH_KEY_REDIS_PREFIX = 'auth_key:'
 # Redis 缓存过期时间（秒）
-AUTH_KEY_CACHE_EXPIRE = 3600  # 1小时
+AUTH_KEY_CACHE_EXPIRE = 43200  # 12小时
 
 # 创建 Redis 连接池
 async def get_redis_pool():
