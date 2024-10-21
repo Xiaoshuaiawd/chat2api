@@ -70,13 +70,7 @@ async def verify_token(req_token, data):
                 else:
                     await write_at(req_token, "")
                     access_token = req_token
-                    return access_token, ""
-            else:
-                if not is_valid_model(data, "normal"):
-                    raise HTTPException(status_code=403, detail="Model not allowed for this user.")
-                access_token = req_token
-                await write_at(access_token, None)
-                return access_token, None
+                    return access_token, "1111"
         else:
             if len(req_token) < 100:
                 req_token = await get_ak(req_token)
@@ -84,7 +78,7 @@ async def verify_token(req_token, data):
                 raise HTTPException(status_code=403, detail="Model not allowed for this user.")
             access_token = req_token
             await write_at(access_token, "")
-            return access_token, ""
+            return access_token, "1111"
 
 async def refresh_all_tokens(force_refresh=False):
     for token in globals.token_list:
