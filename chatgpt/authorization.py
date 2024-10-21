@@ -63,7 +63,6 @@ async def verify_token(req_token, data):
                     raise HTTPException(status_code=403, detail="Model not allowed for this user.")
                 if "," in req_token:
                     req_token = req_token.split(",")[random.randint(0, len(req_token.split(",")) - 1)]
-                print("account_id:", account_id)
                 if account_id:
                     await write_at(req_token, account_id)
                     access_token = req_token
