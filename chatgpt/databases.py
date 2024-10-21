@@ -19,31 +19,32 @@ async def get_rt_at_key_list(auth_key):
     redis_pool = await get_redis_pool()
     # 尝试从 Redis 获取
     data_str = await redis_pool.get(redis_key)
-    print(data_str)
     if data_str:
         data = json.loads(data_str)
         rt_at_key = data["rt_at_key"]
         type = data["type"]
+        account_id = data["account_id"]
         if rt_at_key:
             # Redis 中的数据是字节，需要解码为字符串
-            logger.info(f"从 Redis 获取到 rt_at_key: {rt_at_key} 和 type: {type} for auth_key: {auth_key}")
-            return rt_at_key, type
+            logger.info(f"从 Redis 获取到 rt_at_key: {rt_at_key} type: {type} account_id: {account_id} for auth_key: {auth_key}")
+            return rt_at_key, type, account_id
     else:
         # Redis 中没有缓存，从 MySQL 获取
         pool = await aiomysql.create_pool(**DB_CONFIG)
-        print(pool)
         async with pool.acquire() as conn:
             async with conn.cursor() as cur:
                 # 使用参数化查询以防止SQL注入
-                await cur.execute("SELECT rt_at_key, type FROM chat2api.auth_keys WHERE auth_key = %s", (auth_key,))
+                await cur.execute("SELECT rt_at_key, type, account_id FROM chat2api.auth_keys WHERE auth_key = %s", (auth_key,))
                 result = await cur.fetchone()
                 if result:
                     rt_at_key = result[0]
                     type = result[1]
-                    logger.info(f"从 MySQL 获取到 rt_at_key: {rt_at_key} 和 type: {type} for auth_key: {auth_key}")
+                    account_id = result[2]
+                    logger.info(f"从 MySQL 获取到 rt_at_key: {rt_at_key} type: {type} account_id: {account_id} for auth_key: {auth_key}")
                 else:
                     rt_at_key = None
                     type = None
+                    account_id = None
         pool.close()
         await pool.wait_closed()
         if rt_at_key:
@@ -63,12 +64,13 @@ async def get_rt_at_key_list(auth_key):
                     rt_at_key = await get_ak(rt_at_key)
             data = {
                 "rt_at_key": rt_at_key,
-                "type": type
+                "type": type,
+                "account_id": account_id
             }
             await redis_pool.set(redis_key, json.dumps(data), ex = 43200)
             logger.info(f"将 rt_at_key 存入 Redis: {json.dumps(data)} for auth_key: {auth_key}")
-            return rt_at_key, type
+            return rt_at_key, type, account_id
         else:
-            return None, None
+            return None, None, None
     redis_pool.close()
     await redis_pool.wait_closed()

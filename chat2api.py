@@ -69,18 +69,6 @@ async def process(request_data, req_token):
 async def send_conversation(request: Request, req_token: str = Depends(oauth2_scheme)):
     try:
         request_data = await request.json()
-        for message in request_data['messages']:
-            # 检查 role 字段
-            if message.get('role') == 'assistant':
-                # 替换 role 为 user
-                message['role'] = 'user'
-                # 在 content 文本前添加 "assistant："
-                message['content'] = f"assistant：{message['content']}"
-            if message.get('role') == 'system':
-                # 替换 role 为 user
-                message['role'] = 'user'
-                # 在 content 文本前添加 "assistant："
-                message['content'] = f"system：{message['content']}"
     except Exception:
         raise HTTPException(status_code=400, detail={"error": "Invalid JSON body"})
     chat_service, res = await async_retry(process, request_data, req_token)
@@ -102,206 +90,42 @@ async def send_conversation(request: Request, req_token: str = Depends(oauth2_sc
         logger.error(f"Server error, {str(e)}")
         raise HTTPException(status_code=500, detail="Server error")
 
-@app.get(f"/{api_prefix}/v1/models" if api_prefix else "/v1/models")
-async def models():
-    models ={
-            "data": [
-                {
-                "id": "gpt-4o",
-                "object": "model",
-                "created": 1626777600,
-                "owned_by": "openai",
-                "permission": [
-                    {
-                        "id": "modelperm-LwHkVFn8AcMItP432fKKDIKJ",
-                        "object": "model_permission",
-                        "created": 1626777600,
-                        "allow_create_engine": True,
-                        "allow_sampling": True,
-                        "allow_logprobs": True,
-                        "allow_search_indices": False,
-                        "allow_view": True,
-                        "allow_fine_tuning": False,
-                        "organization": "*",
-                        "group": None,
-                        "is_blocking": False
-                    }
-                ],
-                "root": "gpt-4o",
-                "parent": None
-                },
-                {
-                    "id": "gpt-4o-mini",
-                    "object": "model",
-                    "created": 1626777600,
-                    "owned_by": "openai",
-                    "permission": [
-                        {
-                            "id": "modelperm-LwHkVFn8AcMItP432fKKDIKJ",
-                            "object": "model_permission",
-                            "created": 1626777600,
-                            "allow_create_engine": True,
-                            "allow_sampling": True,
-                            "allow_logprobs": True,
-                            "allow_search_indices": False,
-                            "allow_view": True,
-                            "allow_fine_tuning": False,
-                            "organization": "*",
-                            "group": None,
-                            "is_blocking": False
-                        }
-                    ],
-                    "root": "gpt-4o-mini",
-                    "parent": None
-                },
-                {
-                    "id": "gpt-4o-2024-08-06",
-                    "object": "model",
-                    "created": 1626777600,
-                    "owned_by": "openai",
-                    "permission": [
-                        {
-                            "id": "modelperm-LwHkVFn8AcMItP432fKKDIKJ",
-                            "object": "model_permission",
-                            "created": 1626777600,
-                            "allow_create_engine": True,
-                            "allow_sampling": True,
-                            "allow_logprobs": True,
-                            "allow_search_indices": False,
-                            "allow_view": True,
-                            "allow_fine_tuning": False,
-                            "organization": "*",
-                            "group": None,
-                            "is_blocking": False
-                        }
-                    ],
-                    "root": "gpt-4o-2024-08-06",
-                    "parent": None
-                },
-                {
-                    "id": "gpt-4o-mini-2024-07-18",
-                    "object": "model",
-                    "created": 1626777600,
-                    "owned_by": "openai",
-                    "permission": [
-                        {
-                            "id": "modelperm-LwHkVFn8AcMItP432fKKDIKJ",
-                            "object": "model_permission",
-                            "created": 1626777600,
-                            "allow_create_engine": True,
-                            "allow_sampling": True,
-                            "allow_logprobs": True,
-                            "allow_search_indices": False,
-                            "allow_view": True,
-                            "allow_fine_tuning": False,
-                            "organization": "*",
-                            "group": None,
-                            "is_blocking": False
-                        }
-                    ],
-                    "root": "gpt-4o-mini-2024-07-18",
-                    "parent": None
-                },
-                {
-                    "id": "o1-mini",
-                    "object": "model",
-                    "created": 1626777600,
-                    "owned_by": "openai",
-                    "permission": [
-                        {
-                            "id": "modelperm-LwHkVFn8AcMItP432fKKDIKJ",
-                            "object": "model_permission",
-                            "created": 1626777600,
-                            "allow_create_engine": True,
-                            "allow_sampling": True,
-                            "allow_logprobs": True,
-                            "allow_search_indices": False,
-                            "allow_view": True, 
-                            "allow_fine_tuning": False,
-                            "organization": "*",
-                            "group": None,
-                            "is_blocking": False
-                        }
-                    ],
-                    "root": "o1-mini",
-                    "parent": None
-                },
-                {
-                    "id": "o1-mini-2024-07-18",
-                    "object": "model",
-                    "created": 1626777600,
-                    "owned_by": "openai",
-                    "permission": [
-                        {
-                            "id": "modelperm-LwHkVFn8AcMItP432fKKDIKJ",
-                            "object": "model_permission",
-                            "created": 1626777600,
-                            "allow_create_engine": True,
-                            "allow_sampling": True,
-                            "allow_logprobs": True,
-                            "allow_search_indices": False,
-                            "allow_view": True,
-                            "allow_fine_tuning": False,
-                            "organization": "*",
-                            "group": None,
-                            "is_blocking": False
-                        }
-                    ],
-                    "root": "o1-mini-2024-07-18",
-                    "parent": None
-                },
-                {
-                    "id": "o1-preview",
-                    "object": "model",
-                    "created": 1626777600,
-                    "owned_by": "openai",
-                    "permission": [
-                        {
-                            "id": "modelperm-LwHkVFn8AcMItP432fKKDIKJ",
-                            "object": "model_permission",
-                            "created": 1626777600,
-                            "allow_create_engine": True,
-                            "allow_sampling": True,
-                            "allow_logprobs": True,
-                            "allow_search_indices": False,
-                            "allow_view": True,
-                            "allow_fine_tuning": False,
-                            "organization": "*",
-                            "group": None,
-                            "is_blocking": False
-                        }   
-                    ],
-                    "root": "o1-preview",
-                    "parent": None
-                },
-                {
-                    "id": "o1-preview-2024-07-18",
-                    "object": "model",
-                    "created": 1626777600,
-                    "owned_by": "openai",
-                    "permission": [
-                        {
-                            "id": "modelperm-LwHkVFn8AcMItP432fKKDIKJ",
-                            "object": "model_permission",
-                            "created": 1626777600,
-                            "allow_create_engine": True,
-                            "allow_sampling": True,
-                            "allow_logprobs": True,
-                            "allow_search_indices": False,
-                            "allow_view": True,
-                            "allow_fine_tuning": False,
-                            "organization": "*",
-                            "group": None,
-                            "is_blocking": False
-                        }
-                    ],
-                    "root": "o1-preview-2024-07-18",
-                    "parent": None
-                }
-            ],
-            "success": True
-        }
-    return models
+
+@app.get(f"/{api_prefix}/tokens" if api_prefix else "/tokens", response_class=HTMLResponse)
+async def upload_html(request: Request):
+    tokens_count = len(set(globals.token_list) - set(globals.error_token_list))
+    return templates.TemplateResponse("tokens.html",
+                                      {"request": request, "api_prefix": api_prefix, "tokens_count": tokens_count})
+
+
+@app.post(f"/{api_prefix}/tokens/upload" if api_prefix else "/tokens/upload")
+async def upload_post(text: str = Form(...)):
+    lines = text.split("\n")
+    for line in lines:
+        if line.strip() and not line.startswith("#"):
+            globals.token_list.append(line.strip())
+            with open("data/token.txt", "a", encoding="utf-8") as f:
+                f.write(line.strip() + "\n")
+    logger.info(f"Token count: {len(globals.token_list)}, Error token count: {len(globals.error_token_list)}")
+    tokens_count = len(set(globals.token_list) - set(globals.error_token_list))
+    return {"status": "success", "tokens_count": tokens_count}
+
+
+@app.post(f"/{api_prefix}/tokens/clear" if api_prefix else "/tokens/clear")
+async def upload_post():
+    globals.token_list.clear()
+    globals.error_token_list.clear()
+    with open("data/token.txt", "w", encoding="utf-8") as f:
+        pass
+    logger.info(f"Token count: {len(globals.token_list)}, Error token count: {len(globals.error_token_list)}")
+    tokens_count = len(set(globals.token_list) - set(globals.error_token_list))
+    return {"status": "success", "tokens_count": tokens_count}
+
+
+@app.post(f"/{api_prefix}/tokens/error" if api_prefix else "/tokens/error")
+async def error_tokens():
+    error_tokens_list = list(set(globals.error_token_list))
+    return {"status": "success", "error_tokens": error_tokens_list}
 
 
 @app.api_route("/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH", "TRACE"])

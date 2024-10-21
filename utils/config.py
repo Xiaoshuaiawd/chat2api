@@ -30,11 +30,13 @@ if not ark0se_token_url:
     ark0se_token_url = os.getenv('ARK0SE_TOKEN_URL', None)
 proxy_url = os.getenv('PROXY_URL', '').replace(' ', '')
 export_proxy_url = os.getenv('EXPORT_PROXY_URL', None)
+
 cf_file_url = os.getenv('CF_FILE_URL', None)
+turnstile_solver_url = os.getenv('TURNSTILE_SOLVER_URL', None)
 
 history_disabled = is_true(os.getenv('HISTORY_DISABLED', True))
 pow_difficulty = os.getenv('POW_DIFFICULTY', '000032')
-retry_times = int(os.getenv('RETRY_TIMES', 2))
+retry_times = int(os.getenv('RETRY_TIMES', 0))
 enable_gateway = is_true(os.getenv('ENABLE_GATEWAY', False))
 conversation_only = is_true(os.getenv('CONVERSATION_ONLY', True))
 enable_limit = is_true(os.getenv('ENABLE_LIMIT', False))
@@ -48,26 +50,8 @@ ark0se_token_url_list = ark0se_token_url.split(',') if ark0se_token_url else []
 proxy_url_list = proxy_url.split(',') if proxy_url else []
 user_agents_list = ast.literal_eval(user_agents)
 
-# 数据库配置
-DB_CONFIG = {
-    'host': '159.223.37.28',
-    'port': 23190,
-    'user': 'avnadmin',
-    'password': 'AVNS_kWT94vfTuXN2mWhidSh',
-    'db': 'chat2api',
-    'charset': 'utf8', 
-}
-
-# Redis 配置
-REDIS_CONFIG = {
-    'host': '103.143.81.125', 
-    'port': 6380,
-    'password': 'ZWS1998',
-    'db': 0,
-}
-
 logger.info("-" * 60)
-logger.info("Chat2Api 0.0.1 | https://github.com/Xiaoshuaiawd/chat2api")
+logger.info("Chat2Api 1.4.16 | https://github.com/lanqian528/chat2api")
 logger.info("-" * 60)
 logger.info("Environment variables:")
 logger.info("API_PREFIX:        " + str(api_prefix))
@@ -88,3 +72,21 @@ logger.info("CHECK_MODEL:       " + str(check_model))
 logger.info("SCHEDULED_REFRESH: " + str(scheduled_refresh))
 logger.info("USER_AGENTS:       " + str(user_agents_list))
 logger.info("-" * 60)
+
+# 数据库配置
+DB_CONFIG = {
+    'host': '159.223.37.28',
+    'port': 23190,
+    'user': 'avnadmin',
+    'password': 'AVNS_kWT94vfTuXN2mWhidSh',
+    'db': 'chat2api',
+    'charset': 'utf8', 
+}
+
+# Redis 配置
+REDIS_CONFIG = {
+    'host': '103.143.81.125', 
+    'port': 6380,
+    'password': 'ZWS1998',
+    'db': 0,
+}

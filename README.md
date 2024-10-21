@@ -8,6 +8,10 @@
 
 🔍 回复格式与真实 API 完全一致，适配几乎所有客户端
 
+## 交流群
+
+[https://t.me/chat2api](https://t.me/chat2api)
+
 要提问请先阅读完仓库文档，尤其是常见问题部分。
 
 提问时请提供：
@@ -16,9 +20,15 @@
 2. 报错的日志信息（敏感信息打码）
 3. 接口返回的状态码和响应体
 
+## 赞助商
+
+感谢 Capsolver 对本项目的赞助，对于市面上任何人机验证码，你可以使用 [Capsolver](https://www.capsolver.com/zh?utm_source=github&utm_medium=repo&utm_campaign=scraping&utm_term=chat2api) 来解决
+
+[![Capsolver](docs/capsolver.png)](https://www.capsolver.com/zh?utm_source=github&utm_medium=repo&utm_campaign=scraping&utm_term=chat2api)
+
 ## 功能
 
-### 最新版 0.0.1
+### 最新版 v1.4.16
 
 > 已完成
 > - [x] 流式、非流式传输
@@ -41,6 +51,16 @@
 
 > TODO
 > - [ ] 暂无，欢迎提 issue
+
+## Tokens 管理
+
+1. 配置环境变量 `AUTHORIZATION` 作为 `授权码` ，然后运行程序。
+
+2. 访问 `/tokens` 或者 `/{api_prefix}/tokens` 可以查看现有 Tokens 数量，也可以上传新的 Tokens ，或者清空 Tokens。
+
+3. 请求时传入 `AUTHORIZATION` 中配置的 `授权码` 即可使用轮询的Tokens进行对话， `AUTHORIZATION` 可以配置多个值，用英文逗号分隔。
+
+![tokens.png](docs/tokens.png)
 
 ## 环境变量
 
@@ -67,6 +87,19 @@
 |      | SCHEDULED_REFRESH | `false`                                                     | `false`               | 是否定时刷新 AccessToken ，开启后每次启动程序将会全部非强制刷新一次，每4天晚上3点全部强制刷新一次。    |
 ## 部署
 
+### Zeabur 部署
+
+[![Deploy on Zeabur](https://zeabur.com/button.svg)](https://zeabur.com/templates/6HEGIZ?referralCode=LanQian528)
+
+### 直接部署
+
+```bash
+git clone https://github.com/LanQian528/chat2api
+cd chat2api
+pip install -r requirements.txt
+python app.py
+```
+
 ### Docker 部署
 
 您需要安装 Docker 和 Docker Compose。
@@ -75,7 +108,7 @@
 docker run -d \
   --name chat2api \
   -p 5005:5005 \
-  aliin/chat2api:latest
+  lanqian528/chat2api:latest
 ```
 
 ### (推荐，可用 PLUS 账号) Docker Compose 部署
