@@ -40,6 +40,8 @@ async def get_rt_at_key_list(auth_key):
                     rt_at_key = result[0]
                     type = result[1]
                     account_id = result[2]
+                    if account_id == "":
+                        account_id = None
                     logger.info(f"从 MySQL 获取到 rt_at_key: {rt_at_key} type: {type} account_id: {account_id} for auth_key: {auth_key}")
                 else:
                     rt_at_key = None

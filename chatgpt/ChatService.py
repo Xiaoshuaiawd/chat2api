@@ -32,9 +32,8 @@ class ChatService:
             logger.info(f"Request token: {self.req_token}")
             req_len = len(self.req_token.split(","))
             if req_len == 1:
+                
                 self.access_token, self.account_id = await verify_token(self.req_token, data)
-                print("access_token:", self.access_token)
-                print("account_id:", self.account_id)
             else:
                 self.access_token, self.account_id = await verify_token(self.req_token.split(",")[0], data)
         else:

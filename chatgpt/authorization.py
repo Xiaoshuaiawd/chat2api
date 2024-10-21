@@ -56,16 +56,22 @@ async def verify_token(req_token, data):
         else:
             return None
     else:
-        if req_token.startswith("eyJhbGciOi") or req_token.startswith("sk-"):
+        if req_token.startswith("sk-"):
             if req_token.startswith("sk-"):
                 req_token,type,account_id = await get_rt_at_key_list(req_token)
                 if not is_valid_model(data, type):
                     raise HTTPException(status_code=403, detail="Model not allowed for this user.")
                 if "," in req_token:
                     req_token = req_token.split(",")[random.randint(0, len(req_token.split(",")) - 1)]
-                await write_at(req_token, account_id)
-                access_token = req_token
-                return access_token, account_id
+                print("account_id:", account_id)
+                if account_id:
+                    await write_at(req_token, account_id)
+                    access_token = req_token
+                    return access_token, account_id
+                else:
+                    await write_at(req_token, "")
+                    access_token = req_token
+                    return access_token, ""
             else:
                 if not is_valid_model(data, "normal"):
                     raise HTTPException(status_code=403, detail="Model not allowed for this user.")
@@ -78,8 +84,8 @@ async def verify_token(req_token, data):
             if not is_valid_model(data, "normal"):
                 raise HTTPException(status_code=403, detail="Model not allowed for this user.")
             access_token = req_token
-            await write_at(access_token, None)
-            return access_token, None
+            await write_at(access_token, "")
+            return access_token, ""
 
 async def refresh_all_tokens(force_refresh=False):
     for token in globals.token_list:
