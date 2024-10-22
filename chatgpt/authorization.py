@@ -39,15 +39,6 @@ async def write_at(rt, account_id):
     with open('data/at.txt', 'a') as f:
         f.write("rt:"+rt+" account_id:"+account_id+"\n")
 
-import random
-import logging
-from fastapi import HTTPException
-
-logger = logging.getLogger(__name__)
-
-# 假设 authorization_list 是全局定义的
-# authorization_list = [...]
-
 async def verify_token(req_token: str, data) -> tuple:
     if not req_token:
         if authorization_list:
@@ -72,13 +63,6 @@ async def verify_token(req_token: str, data) -> tuple:
 
         # 如果未提供 account_id，使用默认的 account_id
         account_id = account_id or "1111"
-
-        try:
-            await write_at(selected_token, account_id)
-        except Exception as e:
-            logger.error(f"写入访问令牌时出错：{e}")
-            raise HTTPException(status_code=500, detail="内部服务器错误。")
-
         return selected_token, account_id
 
     else:
