@@ -34,15 +34,6 @@ async def is_valid_model(data, type):
         return model in allowed_models_basic
     return model in allowed_models_plus
 
-# 检查模型是否合法
-def is_valid_model(data, type):
-    allowed_models_plus = ['o1-mini', 'o1-preview', 'gpt-4o', 'gpt-4o-mini', 'gpt-4o-2024-08-06', 'gpt-4o-mini-2024-07-18', 'gpt-4', 'gpt-4-turbo', 'gpt-4-turbo-2024-04-09', 'gpt-4-turbo-2024-07-18']
-    allowed_models_basic = ['gpt-4o', 'gpt-4o-mini', 'gpt-4o-2024-08-06', 'gpt-4o-mini-2024-07-18']
-    model = data.get('model')
-    if not type == "plus":
-        # 检查非 plus 用户模型限制
-        return model in allowed_models_basic
-    return model in allowed_models_plus
 #保存rt
 async def write_at(rt, account_id):
     with open('data/at.txt', 'a') as f:
@@ -59,7 +50,7 @@ async def verify_token(req_token, data):
         if req_token.startswith("sk-"):
             if req_token.startswith("sk-"):
                 req_token,type,account_id = await get_rt_at_key_list(req_token)
-                if not is_valid_model(data, type):
+                if not await is_valid_model(data, type):
                     raise HTTPException(status_code=403, detail="Model not allowed for this user.")
                 if "," in req_token:
                     req_token = req_token.split(",")[random.randint(0, len(req_token.split(",")) - 1)]
@@ -74,7 +65,7 @@ async def verify_token(req_token, data):
         else:
             if len(req_token) < 100:
                 req_token = await get_ak(req_token)
-            if not is_valid_model(data, "normal"):
+            if not await is_valid_model(data, "normal"):
                 raise HTTPException(status_code=403, detail="Model not allowed for this user.")
             access_token = req_token
             await write_at(access_token, "")
