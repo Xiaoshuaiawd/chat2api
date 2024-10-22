@@ -39,37 +39,69 @@ async def write_at(rt, account_id):
     with open('data/at.txt', 'a') as f:
         f.write("rt:"+rt+" account_id:"+account_id+"\n")
 
-async def verify_token(req_token, data):
+import random
+import logging
+from fastapi import HTTPException
+
+logger = logging.getLogger(__name__)
+
+# 假设 authorization_list 是全局定义的
+# authorization_list = [...]
+
+async def verify_token(req_token: str, data) -> tuple:
     if not req_token:
         if authorization_list:
-            logger.error("Unauthorized with empty token.")
-            raise HTTPException(status_code=401)
+            logger.error("使用空 token 进行未授权访问。")
+            raise HTTPException(status_code=401, detail="未授权：缺少 token。")
         else:
             return None
+
+    if req_token.startswith("sk-"):
+        # 处理密钥 token
+        try:
+            req_token, token_type, account_id = await get_rt_at_key_list(req_token)
+        except Exception as e:
+            logger.error(f"获取 token 列表时出错：{e}")
+            raise HTTPException(status_code=500, detail="内部服务器错误。")
+
+        if not await is_valid_model(data, token_type):
+            raise HTTPException(status_code=403, detail="此用户不允许使用该模型。")
+
+        tokens = req_token.split(",") if "," in req_token else [req_token]
+        selected_token = random.choice(tokens)
+
+        # 如果未提供 account_id，使用默认的 account_id
+        account_id = account_id or "1111"
+
+        try:
+            await write_at(selected_token, account_id)
+        except Exception as e:
+            logger.error(f"写入访问令牌时出错：{e}")
+            raise HTTPException(status_code=500, detail="内部服务器错误。")
+
+        return selected_token, account_id
+
     else:
-        if req_token.startswith("sk-"):
-            if req_token.startswith("sk-"):
-                req_token,type,account_id = await get_rt_at_key_list(req_token)
-                if not await is_valid_model(data, type):
-                    raise HTTPException(status_code=403, detail="Model not allowed for this user.")
-                if "," in req_token:
-                    req_token = req_token.split(",")[random.randint(0, len(req_token.split(",")) - 1)]
-                if account_id:
-                    await write_at(req_token, account_id)
-                    access_token = req_token
-                    return access_token, account_id
-                else:
-                    await write_at(req_token, "")
-                    access_token = req_token
-                    return access_token, "1111"
-        else:
+        # 处理普通 token
+        try:
             if len(req_token) < 100:
                 req_token = await get_ak(req_token)
-            if not await is_valid_model(data, "normal"):
-                raise HTTPException(status_code=403, detail="Model not allowed for this user.")
-            access_token = req_token
-            await write_at(access_token, "")
-            return access_token, "1111"
+        except Exception as e:
+            logger.error(f"获取 AK 时出错：{e}")
+            raise HTTPException(status_code=500, detail="内部服务器错误。")
+
+        if not await is_valid_model(data, "normal"):
+            raise HTTPException(status_code=403, detail="此用户不允许使用该模型。")
+
+        access_token = req_token
+
+        try:
+            await write_at(access_token, "1111")
+        except Exception as e:
+            logger.error(f"写入访问令牌时出错：{e}")
+            raise HTTPException(status_code=500, detail="内部服务器错误。")
+
+        return access_token, "1111"
 
 async def refresh_all_tokens(force_refresh=False):
     for token in globals.token_list:
