@@ -75,10 +75,10 @@ logger.info("-" * 60)
 
 # 数据库配置
 DB_CONFIG = {
-    'host': '159.223.37.28',
-    'port': 23190,
-    'user': 'avnadmin',
-    'password': 'AVNS_kWT94vfTuXN2mWhidSh',
+    'host': '103.143.81.125',
+    'port': 3306,
+    'user': 'root',
+    'password': 'ZWS1998',
     'db': 'chat2api',
     'charset': 'utf8', 
 }
