@@ -40,13 +40,6 @@ async def write_at(rt, account_id):
         f.write("rt:"+rt+" account_id:"+account_id+"\n")
 
 async def verify_token(req_token: str, data) -> tuple:
-    if not req_token:
-        if authorization_list:
-            logger.error("使用空 token 进行未授权访问。")
-            raise HTTPException(status_code=401, detail="未授权：缺少 token。")
-        else:
-            return None
-
     if req_token.startswith("sk-"):
         # 处理密钥 token
         try:
@@ -64,28 +57,9 @@ async def verify_token(req_token: str, data) -> tuple:
         # 如果未提供 account_id，使用默认的 account_id
         account_id = account_id or "1111"
         return selected_token, account_id
-
     else:
-        # 处理普通 token
-        try:
-            if len(req_token) < 100:
-                req_token = await get_ak(req_token)
-        except Exception as e:
-            logger.error(f"获取 AK 时出错：{e}")
-            raise HTTPException(status_code=500, detail="内部服务器错误。")
-
-        if not await is_valid_model(data, "normal"):
-            raise HTTPException(status_code=403, detail="此用户不允许使用该模型。")
-
-        access_token = req_token
-
-        try:
-            await write_at(access_token, "1111")
-        except Exception as e:
-            logger.error(f"写入访问令牌时出错：{e}")
-            raise HTTPException(status_code=500, detail="内部服务器错误。")
-
-        return access_token, "1111"
+        raise HTTPException(status_code=403, detail="非Plus用户禁止请求本接口")
+    
 
 async def refresh_all_tokens(force_refresh=False):
     for token in globals.token_list:

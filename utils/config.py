@@ -36,7 +36,7 @@ turnstile_solver_url = os.getenv('TURNSTILE_SOLVER_URL', None)
 
 history_disabled = is_true(os.getenv('HISTORY_DISABLED', True))
 pow_difficulty = os.getenv('POW_DIFFICULTY', '000032')
-retry_times = int(os.getenv('RETRY_TIMES', 0))
+retry_times = int(os.getenv('RETRY_TIMES', 1))
 enable_gateway = is_true(os.getenv('ENABLE_GATEWAY', False))
 conversation_only = is_true(os.getenv('CONVERSATION_ONLY', False))
 enable_limit = is_true(os.getenv('ENABLE_LIMIT', False))
