@@ -56,6 +56,7 @@ async def get_rt_at_key_list(auth_key):
                     account_id = account_id if account_id else None
                     logger.info(f"从 MySQL 获取到 rt_at_key: {rt_at_key} type: {type} account_id: {account_id} for auth_key: {auth_key}")
                 else:
+                    await mysql_pool.close() # 关闭 MySQL 连接
                     return None, None, None
 
         if rt_at_key:
@@ -89,10 +90,8 @@ async def get_rt_at_key_list(auth_key):
             await redis_pool.set(redis_key, json.dumps(data), ex=AUTH_KEY_CACHE_EXPIRE)
             logger.info(f"将 rt_at_key 存入 Redis: {json.dumps(data)} for auth_key: {auth_key}")
             await redis_pool.close()  # 关闭 Redis 连接
+            await mysql_pool.close() # 关闭 MySQL 连接
             return rt_at_key, type, account_id
-    await redis_pool.close()  # 关闭 Redis 连接
-    await mysql_pool.close() # 关闭 MySQL 连接
-    return None, None, None
 
 # 在程序退出时手动关闭连接池
 async def close_pools():
