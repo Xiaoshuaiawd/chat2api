@@ -12,28 +12,11 @@ AUTH_KEY_REDIS_PREFIX = 'auth_key:'
 # Redis 缓存过期时间（秒）
 AUTH_KEY_CACHE_EXPIRE = 43200  # 12小时
 
-# 创建 Redis 连接池 (全局单例)
-redis_pool = None
-mysql_pool = None
-
-# 获取 Redis 连接池，确保全局只创建一次
-async def get_redis_pool():
-    global redis_pool
-    if not redis_pool:
-        redis_pool = redis.Redis(**REDIS_CONFIG)
-    return redis_pool
-
-# 获取 MySQL 连接池，确保全局只创建一次
-async def get_mysql_pool():
-    global mysql_pool
-    if not mysql_pool:
-        mysql_pool = await aiomysql.create_pool(**DB_CONFIG)
-    return mysql_pool
 
 # 获取 rt_at_key 列表
 async def get_rt_at_key_list(auth_key):
     redis_key = f"{AUTH_KEY_REDIS_PREFIX}{auth_key}"
-    redis_pool = await get_redis_pool()
+    redis_pool = await redis.Redis(**REDIS_CONFIG)
     # 尝试从 Redis 获取缓存
     data_str = await redis_pool.get(redis_key)
     if data_str:
@@ -46,7 +29,7 @@ async def get_rt_at_key_list(auth_key):
             return rt_at_key, type, account_id
     else:
         # Redis 中没有缓存，从 MySQL 获取
-        mysql_pool = await get_mysql_pool()
+        mysql_pool = await aiomysql.create_pool(**DB_CONFIG)
         async with mysql_pool.acquire() as conn:
             async with conn.cursor() as cur:
                 await cur.execute("SELECT rt_at_key, type, account_id FROM chat2api.auth_keys WHERE auth_key = %s", (auth_key,))
@@ -92,11 +75,3 @@ async def get_rt_at_key_list(auth_key):
             await redis_pool.close()  # 关闭 Redis 连接
             await mysql_pool.close() # 关闭 MySQL 连接
             return rt_at_key, type, account_id
-
-# 在程序退出时手动关闭连接池
-async def close_pools():
-    if redis_pool:
-        await redis_pool.close()
-    if mysql_pool:
-        mysql_pool.close()
-        await mysql_pool.wait_closed()
