@@ -58,7 +58,7 @@ async def verify_token(req_token: str, data) -> tuple:
         account_id = account_id or "1111"
         return selected_token, account_id
     else:
-        raise HTTPException(status_code=403, detail="非Plus用户禁止请求本接口")
+        raise HTTPException(status_code=403, detail="请使用用户系统提供的key进行请求")
     
 
 async def refresh_all_tokens(force_refresh=False):
