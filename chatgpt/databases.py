@@ -91,6 +91,7 @@ async def get_rt_at_key_list(auth_key):
             await redis_pool.close()  # 关闭 Redis 连接
             return rt_at_key, type, account_id
     await redis_pool.close()  # 关闭 Redis 连接
+    await mysql_pool.close() # 关闭 MySQL 连接
     return None, None, None
 
 # 在程序退出时手动关闭连接池
