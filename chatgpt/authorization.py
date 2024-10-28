@@ -1,5 +1,6 @@
 import asyncio
 import random
+import re
 
 from fastapi import HTTPException
 from chatgpt.databases import get_rt_at_key_list
@@ -24,15 +25,33 @@ def get_req_token(req_token):
             return None
     else:
         return req_token
+def match_model(model, allowed_models):
+    for allowed_model in allowed_models:
+        if '*' in allowed_model:
+            # 将通配符转换为正则表达式
+            pattern = re.escape(allowed_model).replace(r'\*', '.*')
+            if re.match(pattern, model):
+                return True
+        elif model == allowed_model:
+            return True
+    return False
 
 async def is_valid_model(data, type):
-    allowed_models_plus = ['o1-mini', 'o1-preview', 'gpt-4o', 'gpt-4o-mini', 'gpt-4o-2024-08-06', 'gpt-4o-mini-2024-07-18', 'gpt-4', 'gpt-4-turbo', 'gpt-4-turbo-2024-04-09', 'gpt-4-turbo-2024-07-18']
-    allowed_models_basic = ['gpt-4o', 'gpt-4o-mini', 'gpt-4o-2024-08-06', 'gpt-4o-mini-2024-07-18']
+    allowed_models_plus = [
+        'o1-mini', 'o1-preview', 'gpt-4o', 'gpt-4o-mini', 'gpt-4o-2024-08-06', 
+        'gpt-4o-mini-2024-07-18', 'gpt-4', 'gpt-4-turbo', 'gpt-4-turbo-2024-04-09', 
+        'gpt-4-turbo-2024-07-18', 'gpt-4-gizmo-g-*'
+    ]
+    allowed_models_basic = [
+        'gpt-4o', 'gpt-4o-mini', 'gpt-4o-2024-08-06', 'gpt-4o-mini-2024-07-18',
+        'gpt-4-gizmo-g-*'
+    ]
     model = data.get('model')
-    if not type == "plus":
-        # 检查非 plus 用户模型限制
-        return model in allowed_models_basic
-    return model in allowed_models_plus
+    
+    if type == "plus":
+        return match_model(model, allowed_models_plus)
+    else:
+        return match_model(model, allowed_models_basic)
 
 #保存rt
 async def write_at(rt, account_id):
