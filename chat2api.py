@@ -154,6 +154,208 @@ async def add_token(token: str):
     return {"status": "success", "tokens_count": tokens_count}
 
 
+@app.get(f"/{api_prefix}/v1/models" if api_prefix else "/v1/models")
+async def models():
+    models ={
+            "data": [
+                {
+                "id": "gpt-4o",
+                "object": "model",
+                "created": 1626777600,
+                "owned_by": "openai",
+                "permission": [
+                    {
+                        "id": "modelperm-LwHkVFn8AcMItP432fKKDIKJ",
+                        "object": "model_permission",
+                        "created": 1626777600,
+                        "allow_create_engine": True,
+                        "allow_sampling": True,
+                        "allow_logprobs": True,
+                        "allow_search_indices": False,
+                        "allow_view": True,
+                        "allow_fine_tuning": False,
+                        "organization": "*",
+                        "group": None,
+                        "is_blocking": False
+                    }
+                ],
+                "root": "gpt-4o",
+                "parent": None
+                },
+                {
+                    "id": "gpt-4o-mini",
+                    "object": "model",
+                    "created": 1626777600,
+                    "owned_by": "openai",
+                    "permission": [
+                        {
+                            "id": "modelperm-LwHkVFn8AcMItP432fKKDIKJ",
+                            "object": "model_permission",
+                            "created": 1626777600,
+                            "allow_create_engine": True,
+                            "allow_sampling": True,
+                            "allow_logprobs": True,
+                            "allow_search_indices": False,
+                            "allow_view": True,
+                            "allow_fine_tuning": False,
+                            "organization": "*",
+                            "group": None,
+                            "is_blocking": False
+                        }
+                    ],
+                    "root": "gpt-4o-mini",
+                    "parent": None
+                },
+                {
+                    "id": "gpt-4o-2024-08-06",
+                    "object": "model",
+                    "created": 1626777600,
+                    "owned_by": "openai",
+                    "permission": [
+                        {
+                            "id": "modelperm-LwHkVFn8AcMItP432fKKDIKJ",
+                            "object": "model_permission",
+                            "created": 1626777600,
+                            "allow_create_engine": True,
+                            "allow_sampling": True,
+                            "allow_logprobs": True,
+                            "allow_search_indices": False,
+                            "allow_view": True,
+                            "allow_fine_tuning": False,
+                            "organization": "*",
+                            "group": None,
+                            "is_blocking": False
+                        }
+                    ],
+                    "root": "gpt-4o-2024-08-06",
+                    "parent": None
+                },
+                {
+                    "id": "gpt-4o-mini-2024-07-18",
+                    "object": "model",
+                    "created": 1626777600,
+                    "owned_by": "openai",
+                    "permission": [
+                        {
+                            "id": "modelperm-LwHkVFn8AcMItP432fKKDIKJ",
+                            "object": "model_permission",
+                            "created": 1626777600,
+                            "allow_create_engine": True,
+                            "allow_sampling": True,
+                            "allow_logprobs": True,
+                            "allow_search_indices": False,
+                            "allow_view": True,
+                            "allow_fine_tuning": False,
+                            "organization": "*",
+                            "group": None,
+                            "is_blocking": False
+                        }
+                    ],
+                    "root": "gpt-4o-mini-2024-07-18",
+                    "parent": None
+                },
+                {
+                    "id": "o1-mini",
+                    "object": "model",
+                    "created": 1626777600,
+                    "owned_by": "openai",
+                    "permission": [
+                        {
+                            "id": "modelperm-LwHkVFn8AcMItP432fKKDIKJ",
+                            "object": "model_permission",
+                            "created": 1626777600,
+                            "allow_create_engine": True,
+                            "allow_sampling": True,
+                            "allow_logprobs": True,
+                            "allow_search_indices": False,
+                            "allow_view": True, 
+                            "allow_fine_tuning": False,
+                            "organization": "*",
+                            "group": None,
+                            "is_blocking": False
+                        }
+                    ],
+                    "root": "o1-mini",
+                    "parent": None
+                },
+                {
+                    "id": "o1-mini-2024-07-18",
+                    "object": "model",
+                    "created": 1626777600,
+                    "owned_by": "openai",
+                    "permission": [
+                        {
+                            "id": "modelperm-LwHkVFn8AcMItP432fKKDIKJ",
+                            "object": "model_permission",
+                            "created": 1626777600,
+                            "allow_create_engine": True,
+                            "allow_sampling": True,
+                            "allow_logprobs": True,
+                            "allow_search_indices": False,
+                            "allow_view": True,
+                            "allow_fine_tuning": False,
+                            "organization": "*",
+                            "group": None,
+                            "is_blocking": False
+                        }
+                    ],
+                    "root": "o1-mini-2024-07-18",
+                    "parent": None
+                },
+                {
+                    "id": "o1-preview",
+                    "object": "model",
+                    "created": 1626777600,
+                    "owned_by": "openai",
+                    "permission": [
+                        {
+                            "id": "modelperm-LwHkVFn8AcMItP432fKKDIKJ",
+                            "object": "model_permission",
+                            "created": 1626777600,
+                            "allow_create_engine": True,
+                            "allow_sampling": True,
+                            "allow_logprobs": True,
+                            "allow_search_indices": False,
+                            "allow_view": True,
+                            "allow_fine_tuning": False,
+                            "organization": "*",
+                            "group": None,
+                            "is_blocking": False
+                        }   
+                    ],
+                    "root": "o1-preview",
+                    "parent": None
+                },
+                {
+                    "id": "o1-preview-2024-07-18",
+                    "object": "model",
+                    "created": 1626777600,
+                    "owned_by": "openai",
+                    "permission": [
+                        {
+                            "id": "modelperm-LwHkVFn8AcMItP432fKKDIKJ",
+                            "object": "model_permission",
+                            "created": 1626777600,
+                            "allow_create_engine": True,
+                            "allow_sampling": True,
+                            "allow_logprobs": True,
+                            "allow_search_indices": False,
+                            "allow_view": True,
+                            "allow_fine_tuning": False,
+                            "organization": "*",
+                            "group": None,
+                            "is_blocking": False
+                        }
+                    ],
+                    "root": "o1-preview-2024-07-18",
+                    "parent": None
+                }
+            ],
+            "success": True
+        }
+    return models
+
+
 if enable_gateway:
     @app.get("/", response_class=HTMLResponse)
     async def chatgpt_html(request: Request):
