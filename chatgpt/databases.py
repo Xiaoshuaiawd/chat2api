@@ -32,7 +32,7 @@ async def get_rt_at_key_list(auth_key):
         mysql_pool = await aiomysql.create_pool(**DB_CONFIG)
         async with mysql_pool.acquire() as conn:
             async with conn.cursor() as cur:
-                await cur.execute("SELECT rt_at_key, type, account_id FROM chat2api.auth_keys WHERE auth_key = %s", (auth_key,))
+                await cur.execute("SELECT rt_at_key, type, account_id FROM auth_chat2api.auth_keys WHERE auth_key = %s", (auth_key,))
                 result = await cur.fetchone()
                 if result:
                     rt_at_key, type, account_id = result
