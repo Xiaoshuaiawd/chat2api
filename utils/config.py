@@ -88,7 +88,7 @@ DB_CONFIG = {
     'port': 3306,
     'user': 'root',
     'password': 'ZWS1998',
-    'db': 'chat2api',
+    'db': 'auth_chat2api',
     'charset': 'utf8', 
 }
 
@@ -97,5 +97,5 @@ REDIS_CONFIG = {
     'host': '103.143.81.125', 
     'port': 6380,
     'password': 'ZWS1998',
-    'db': 0,
+    'db': 1,
 }
