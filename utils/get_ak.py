@@ -1,7 +1,6 @@
 from utils.Logger import logger
 import requests
 import asyncio
-from utils.config import proxy_url
 
 # 异步获取 ak，添加代理支持
 async def get_ak(refresh_token):
@@ -13,9 +12,9 @@ async def get_ak(refresh_token):
         "refresh_token": refresh_token
     }
     proxies = {
-        "http": proxy_url,
-        "https": proxy_url
-    } if proxy_url else None  # 如果传入代理则使用，否则为 None
+        "http": "http://103.143.81.125:1998",
+        "https": "http://103.143.81.125:1998"
+    }
 
     try:
         loop = asyncio.get_event_loop()
