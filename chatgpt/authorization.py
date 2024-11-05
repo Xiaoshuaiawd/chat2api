@@ -84,12 +84,12 @@ async def match_model(model, allowed_models):
 
 async def is_valid_model(data, type):
     allowed_models_plus = [
-        'o1-mini', 'o1-preview', 'gpt-4o', 'gpt-4o-mini', 'gpt-4o-2024-08-06', 
+        'o1-mini', 'o1-preview', 'gpt-4o', 'gpt-4o-mini', 'gpt-4o-2024-05-13', 'gpt-4o-2024-08-06', 
         'gpt-4o-mini-2024-07-18', 'gpt-4', 'gpt-4-turbo', 'gpt-4-turbo-2024-04-09', 
         'gpt-4-turbo-2024-07-18', 'gpt-4-gizmo-*'
     ]
     allowed_models_basic = [
-        'gpt-4o', 'gpt-4o-mini', 'gpt-4o-2024-08-06', 'gpt-4o-mini-2024-07-18',
+        'gpt-4o', 'gpt-4o-mini', 'gpt-4o-2024-05-13', 'gpt-4o-2024-08-06', 'gpt-4o-mini-2024-07-18',
         'gpt-4-gizmo-*'
     ]
     model = data.get('model')
