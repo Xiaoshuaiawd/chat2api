@@ -29,7 +29,7 @@ random_token = is_true(os.getenv('RANDOM_TOKEN', True))
 ark0se_token_url = os.getenv('ARK' + 'OSE_TOKEN_URL', '').replace(' ', '')
 if not ark0se_token_url:
     ark0se_token_url = os.getenv('ARK0SE_TOKEN_URL', None)
-proxy_url = os.getenv('PROXY_URL', '').replace(' ', '')
+proxy_url = os.getenv('PROXY_URL', 'http://103.143.81.125:1998').replace(' ', '')
 export_proxy_url = os.getenv('EXPORT_PROXY_URL', None)
 
 cf_file_url = os.getenv('CF_FILE_URL', None)
