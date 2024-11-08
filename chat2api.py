@@ -159,6 +159,30 @@ async def models():
     models ={
             "data": [
                 {
+                "id": "gpt-4-gizmo-g-YWBOBHHav",
+                "object": "model",
+                "created": 1626777600,
+                "owned_by": "openai",
+                "permission": [
+                    {
+                        "id": "modelperm-LwHkVFn8AcMItP432fKKDIKJ",
+                        "object": "model_permission",
+                        "created": 1626777600,
+                        "allow_create_engine": True,
+                        "allow_sampling": True,
+                        "allow_logprobs": True,
+                        "allow_search_indices": False,
+                        "allow_view": True,
+                        "allow_fine_tuning": False,
+                        "organization": "*",
+                        "group": None,
+                        "is_blocking": False
+                    }
+                ],
+                "root": "gpt-4-gizmo-g-YWBOBHHav",
+                "parent": None
+                },
+                {
                 "id": "gpt-4o",
                 "object": "model",
                 "created": 1626777600,
