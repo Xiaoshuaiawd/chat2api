@@ -73,7 +73,7 @@ async def send_conversation(request: Request, req_token: str = Depends(oauth2_sc
     try:
         request_data = await request.json()
         # 添加图片消息到消息列表开头
-        if request_data["model"] == "o1-mini" or request_data["model"] == "o1-mini-2024-07-18" or request_data["model"] == "o1-preview" or request_data["model"] == "o1-preview-2024-07-18":
+        if request_data["model"] == "o1-mini" or request_data["model"] == "o1-mini-2024-07-18" or request_data["model"] == "o1-preview" or request_data["model"] == "o1-preview-2024-07-18" or request_data["model"] == "gpt-4o" or request_data["model"] == "gpt-4o-2024-05-13":
             image_message = {
                 "role": "user", 
                 "content": [
