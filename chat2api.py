@@ -72,18 +72,39 @@ async def process(request_data, req_token):
 async def send_conversation(request: Request, req_token: str = Depends(oauth2_scheme)):
     try:
         request_data = await request.json()
-        for message in request_data['messages']:
-            # 检查 role 字段
-            if message.get('role') == 'assistant':
-                # 替换 role 为 user
-                message['role'] = 'user'
-                # 在 content 文本前添加 "assistant："
-                message['content'] = f"assistant：{message['content']}"
-            if message.get('role') == 'system':
-                # 替换 role 为 user
-                message['role'] = 'user'
-                # 在 content 文本前添加 "assistant："
-                message['content'] = f"system：{message['content']}"
+        # 添加图片消息到消息列表开头
+        if request_data["model"] == "o1-mini" or request_data["model"] == "o1-mini-2024-07-18" or request_data["model"] == "o1-preview" or request_data["model"] == "o1-preview-2024-07-18":
+            image_message = {
+                "role": "user", 
+                "content": [
+                    {
+                        "type": "image_url",
+                        "image_url": {
+                            "url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWgAAAFoCAYAAAB65WHVAAAAAXNSR0IArs4c6QAAIABJREFUeF7tnXecFUXWht/qIUlQwICAAURRWXRRF12UrIIiQQREDAiIWVzX9OmaYI1rWlfMRMmSs4CBAVFMKIqKIAioKBnJcbq+X88wMOGGrupwO7z3L2UqvufUc889XV0lwA8VCIACfRvua1poGIZx6P+laJJ4iLJwnZTzENnF/izknEL/"
+                        }
+                    }
+                ]
+            }
+            request_data['messages'].insert(0, image_message)
+            # 原有的消息处理逻辑
+            for message in request_data['messages']:
+                if message.get('role') == 'assistant':
+                    message['role'] = 'user'
+                    message['content'] = f"assistant：{message['content']}"
+                if message.get('role') == 'system':
+                    message['role'] = 'user' 
+                    message['content'] = f"system：{message['content']}"
+        else:
+            # 原有的消息处理逻辑
+            for message in request_data['messages']:
+                if message.get('role') == 'assistant':
+                    message['role'] = 'user'
+                    message['content'] = f"assistant：{message['content']}"
+                if message.get('role') == 'system':
+                    message['role'] = 'user' 
+                    message['content'] = f"system：{message['content']}"
+
+        
     except Exception:
         raise HTTPException(status_code=400, detail={"error": "Invalid JSON body"})
     chat_service, res = await async_retry(process, request_data, req_token)
